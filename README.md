@@ -8,7 +8,7 @@ Linux | [![Build Status](https://travis-ci.org/plang85/numerical_recipes_modern_
 ```
 mkdir build
 cd build
-cmake ../.
+cmake ..
 make
 make test
 ```
