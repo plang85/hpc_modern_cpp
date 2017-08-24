@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 2.8.2)
-
 project(NR_MCPP)
 
 include(CTest)
@@ -28,11 +27,10 @@ add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 # For earlier CMake versions, we have to explicitly add the
 # required directories to the header search path ourselves.
 if (CMAKE_VERSION VERSION_LESS 2.8.11)
-    include_directories("${gtest_SOURCE_DIR}/include"
-                        "${gmock_SOURCE_DIR}/include")
+    include_directories("${gtest_SOURCE_DIR}/include")
 endif()
 
-# Trivial example using gtest and gmock
+# Trivial example using gtest 
 add_executable(example example.cpp)
-target_link_libraries(example gtest gmock_main)
+target_link_libraries(example gtest)
 add_test(NAME example_test COMMAND example)
