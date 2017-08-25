@@ -30,7 +30,9 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
     include_directories("${gtest_SOURCE_DIR}/include")
 endif()
 
+include_directories("${PROJECT_SOURCE_DIR}/minimization")
+
 # Trivial example using gtest 
-add_executable(example example.cpp)
-target_link_libraries(example gtest)
-add_test(NAME example_test COMMAND example)
+add_executable(numrec main.cpp minimization/downhill_simplex.cpp minimization/test_downhill_simplex.cpp)
+target_link_libraries(numrec gtest)
+add_test(NAME all COMMAND numrec)

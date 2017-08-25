@@ -1,12 +1,6 @@
 #include "gtest/gtest.h"
 
 
-// Simple test, does not use gmock
-TEST(Dummy, foobar)
-{
-    EXPECT_EQ(1, 1);
-}
-
 int main(int argc, char** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
