@@ -6,7 +6,7 @@
 
 struct rosenbrock
 {
-	constexpr double operator() (double x, double y)
+	double operator() (double x, double y)
 	{
 		return 100.*pow((y-x*x), 2) + (1.-x*x);
 	}
