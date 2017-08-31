@@ -60,7 +60,7 @@ double amotry(double **p, double y[], double psum[], int ndim,
 	  free_vector(ptry, 1, ndim);
 	  return ytry;
   }
-  
+
 
 double amoeba(double **p, double y[], int ndim, double ftol, double (*funk)(double []), int *nfunk)
 {
@@ -102,8 +102,35 @@ double amoeba(double **p, double y[], int ndim, double ftol, double (*funk)(doub
 		// begin a new iteration by first extrapolating by a factor -1 through the 
 		// face of the simplex across from the high point, i.e., reflect simplex
 		ytry = amotry(p, y, psum, ndim, funk, ihi, 2.);
-
-
+		if (ytry <= y[ilo])
+		{
+			// gives a result better than the best point, so try an additional extrapolation
+			// by a factor of two
+			ytry = amotry(p, y, psum, ndim, funk, ihi, 2.);
+		}
+		else if (ytry >= y[inhi])
+		{
+			// the reflected point is worse than the second-highest, so look for an intermediate
+			// lower point, i.e., do a one-dimensional contraction
+			ysave = y[ihi];
+			ytry = amotry(p, y, psum, ndim, funk, ihi, 0.5);
+			if (ytry >= ysave)
+			{
+				// cant seem to get rid of that high point, better contract around the lowest pt
+				for (i=1; i <= mpts; i++)
+				{
+					if (i != ilo)
+					{
+						for (j=1; j <= ndim; j++)
+							p[i][j] = psum[j] = 0.5 * (p[i][j]+p[ilo][j]);
+						y[i] = (*funk)(psum);
+					}
+				}
+				*nfunk += ndim;
+				GET_PSUM
+			} else --(*nfunk);
+		}
+	free_vector(psum, 1, ndim);
 	}
 	return 0.;
 }
