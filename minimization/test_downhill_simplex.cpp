@@ -16,8 +16,8 @@ double rosenbrock(double x, double y)
 TEST(minimization, downhill_simplex)
 {
 	double (*funk)(double, double);
-	unk = &rosenbrock;
-
+	funk = &rosenbrock;
+	
 	auto const res = 0.;//amoeba(50.);
 	ASSERT_NEAR(res, 0., 1.0E-10);
 }
