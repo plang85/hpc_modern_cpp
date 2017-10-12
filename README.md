@@ -1,4 +1,4 @@
-# Numerical recipes in modern C++
+# HPC stuff in modern C++
 
 
 Platform | Build status
