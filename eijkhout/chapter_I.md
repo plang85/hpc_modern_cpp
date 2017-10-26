@@ -11,7 +11,7 @@ von Neumann
 - de facto instanteneous
 - 16-32 FP registers
 - aim for register residency by explicit variables
-
+- register spill if requesting more than available
 
 Pipelines
 - different execution levels
@@ -34,7 +34,17 @@ Pipelining
 - example: decode, find locations; copy to register; align exponents; add mantissa; normalize; store.
 - with pipelining, mutltiple indepedent operations in fligth at different stage, means asymptotically (with enough instructions n_1/2), we can execute one per cycle
 - longer pipelines (finer grained steps) can increase asymptotic speed but need more independent instructions in continuous stream. likelihood of independence and no branching decreases non-linear with number of instrucion pipeline
-- peak performance: number of FPU units times clock speed
+- peak performance: number of cores times number of FPU units times clock speed
+  - unobtainable, linpack matrix multiplication gets up to 70%
+
+- Loop unrolling tries to tailor to this
+- [versions](https://godbolt.org/g/1iuQAM)
+```
+for (i = 0; i < N/2-1; i ++) {
+sum1 += a[2*i] * b[2*i];
+sum2 += a[2*i+1] * b[2*i+1];
+}
+```
 
 32-bit, 64-bit
 - width of bus between processor and memory (64-bit can load one double per cycle)
@@ -110,6 +120,7 @@ Multicore architecture
   - Shared L2
   - Multiple cores (eg OpenMP)
 - Node
+  - Shared memory
   - One or more sockets
 - Network
   - Multiple nodes
@@ -129,3 +140,10 @@ Locality
 - Arithmetic intensity
   - Operations per data (addidion: one op, two accesses)
   - Favorable for matrix-matrix mult (neural networks)
+  - Roofline model: performance vs arithmetic intensity, compute bound vs memory bound
+- Temporal locality
+  - Pertains to algorithmic distance of instructions that use same data
+- Spatial locality
+  - Pertains to layout of data in memory
+- Core locality
+  - Pertians to task based parallelism, threads, processing unit
