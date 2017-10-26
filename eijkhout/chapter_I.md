@@ -74,3 +74,58 @@ and sockets (chips)
   - capacity (even ideal cache strategy not able to keep up)
   - conflict (better candidates for eviction, strategy victim)
   - invalidation (multicore transaction conflict)
+  - only important if miss stalls processor
+- Replacement stratgies
+  - LRU (least recently used)
+  - FIFO
+- Lines
+  - Data chunk moved between memory levels
+  - 64-128 bytes
+  - Use proper striding when accessing, follow memory outline, exploit locality
+  - alignment considerations
+- Mapping strategies
+  - direct: quick calculation, e.g. 2 memory locations map to only one cache location
+  - n-way associative: flexible, 1 memory location can map to n cache locations
+- Hardware prefetch algorithms to reduce stalling
+
+Concurrency
+- To exploit memory bandwith, enought relevant and independent requests must be made per cycle
+- Prefetching addresses this to some extent
+- Little's law: concurrency = bandwith x latency, effective throughput = expressed concurrency/latency
+
+Memory banks
+- Interleaved banks to allow for simultaneous fetch of adjacent/sequential data, ie 4 way
+
+TLB
+- Translation Look-aside buffer
+- fast, cached translation from program logical to physical memory pages, can miss
+
+Multicore architecture
+- increasing clock frequency heats up chip and doesn't address memory wall
+- ILP has logical limits
+- move from detected ILP to explicit task parallelism
+- Core
+  - L1 cache, processing units, pipeline
+- Socket/chip
+  - Shared L2
+  - Multiple cores (eg OpenMP)
+- Node
+  - One or more sockets
+- Network
+  - Multiple nodes
+
+Cache coherence
+- Between core dedicated caches
+- Always applies to entire cache line
+- MSI: modified, shared (at least one cache and unmodified), invalid
+- Snooping (detectin sharing of cache lines)
+  - Listen to bus traffic
+- False sharing
+  - Data close in memory that are used by different cores
+  - Since always entire cache line is tainted, coherence is an issue even though the same data is not touched
+
+Locality
+- data used in related operations stored closely in memory
+- Arithmetic intensity
+  - Operations per data (addidion: one op, two accesses)
+  - Favorable for matrix-matrix mult (neural networks)
