@@ -53,8 +53,6 @@ for (i = 0; i < N/2-1; i++)
 }
 ```
 
-
-
 32-bit, 64-bit
 - width of bus between processor and memory (64-bit can load one double per cycle)
 - memory address size
@@ -190,3 +188,49 @@ for (i=0; i<M; i+=2)
   y[i] = s1; y[i+1] = s2;
 }
 ```
+- Loop unrolling limited by number of registers (16-32)
+- Lower order operations (eg copying) cost is amortizible
+
+Power consumption
+- Increases with component count
+- Decreases with component size about proportioinally (voltage, current)
+- Frequency increase leads to heat production
+- Miniaturization and voltage lowering yields leakage eventually
+- Multicore approach
+- Several megawatts for parallel computer
+
+
+## 2 - Parallel Computing
+
+- Hard to define parallelism, many levels (ILP, threads, processes)
+- Concurrency is the composition of independently executing processes
+- Parallelism is the simultaneous execution of (possibly related) computations
+- Goes on to explain map reduce example, communication cost, embarassingly parallelism and logarithmic scaling
+- Speedup us single/multiple processor runtime ratio - a better definition is best single processor implementation of a problem vs parallel implementation
+- Efficiency is speedup over number of processors, obviously < 1 because of communication, load balancing, sequential code paths
+- This definition suffers with problem sizes exceeding single machine capacity
+- On a strict von Neuman model superlinear speedup is impossible, but memory effects can lead to this, and always if disc swapping can be prevented
+- Critical path: dependencies between operations which limit parallelism, sequential limitations and communication
+
+Amdahl's law
+- Code parts that are inherently sequential limit speedup
+- Possible speedup is less than inverse of serial fraction of execution time
+- Efficiency decreases proportionally to number of processors
+- If one accounts for communication overhead, which increases proportionally to number of processors, this is even worse
+- The number of processors should not grow beyond the ratio of scalar execution time and communication overhead
+- Amdahl's law assumes same computational effort on all processors - which decreases in most applications
+- To account for this, it is more realistic to look at the sequential fraction independent of problem size
+- In hybrid parallelization, speedup is limited by the task parallel portion over the serial portion
+
+Scalability
+- *Strong* scalability indicates processor count up to which speedup is maintained
+- *Weak* scalability describes problems where the the speed of operations per processor remains constant as the problem size grows such thath the amound of data per processor remains constant with increasing number of processors
+- Some algorithms scale badly because of increased communiction overhead and data duplicatoin
+
+Computer Architecture
+- Flynn's taxonomy: SISD (single CPU), SIMD (vectorization, threading eesh, GPU), MISD (defacto nonexistant), MIMD (parallel computers), where instruction refers to control flow
+- Vector instructions SIMD Streaming Extensions, Advanced Vector Extensions (512 bit, 8 floats)
+- Most supercomputers these days use commodity processors
+
+Memory Access
+
