@@ -36,15 +36,24 @@ Pipelining
 - longer pipelines (finer grained steps) can increase asymptotic speed but need more independent instructions in continuous stream. likelihood of independence and no branching decreases non-linear with number of instrucion pipeline
 - peak performance: number of cores times number of FPU units times clock speed
   - unobtainable, linpack matrix multiplication gets up to 70%
-
+- pipline compatible: vector addition. not: inner product, since we read and write `s`, so subsequent ops are not independent:
+```
+for (i = 0; i < N; i++) 
+  s += a[i]*b[i]
+```
 - Loop unrolling tries to tailor to this
 - [versions](https://godbolt.org/g/1iuQAM)
+- multiplication instructions are independent due to temporary split sums, which reside in register
+- addition can further be extracted, and multiplication assigned to temporary, also in cache
 ```
-for (i = 0; i < N/2-1; i ++) {
-sum1 += a[2*i] * b[2*i];
-sum2 += a[2*i+1] * b[2*i+1];
+for (i = 0; i < N/2-1; i++) 
+{
+  sum1 += a[2*i] * b[2*i];
+  sum2 += a[2*i+1] * b[2*i+1];
 }
 ```
+
+
 
 32-bit, 64-bit
 - width of bus between processor and memory (64-bit can load one double per cycle)
@@ -136,7 +145,7 @@ Cache coherence
   - Since always entire cache line is tainted, coherence is an issue even though the same data is not touched
 
 Locality
-- data used in related operations stored closely in memory
+- Data used in related operations stored closely in memory
 - Arithmetic intensity
   - Operations per data (addidion: one op, two accesses)
   - Favorable for matrix-matrix mult (neural networks)
@@ -146,4 +155,38 @@ Locality
 - Spatial locality
   - Pertains to layout of data in memory
 - Core locality
-  - Pertians to task based parallelism, threads, processing unit
+  - Pertians to task based parallelism, threads, processing unit, writing to same memory from different threads
+
+Programming Strategies
+- Goedeker and Hoisie
+- Loop tiling (cache blocking)
+```
+for (b=0; b<size/l1size; b++) 
+{
+  blockstart = 0;
+  for (i=0; i<NRUNS; i++) {
+    for (j=0; j<l1size; j++)
+      array[blockstart+j] = 2.3*array[blockstart+j]+1.2;
+}
+```
+- Cache oblivious programming for portability
+- Most important message seems to be use of cache lines, ie locality
+- Loop unrolling, see above and
+```
+for (i)
+  for (j)
+    y[i] = y[i] + a[i][j] * x[j];
+```
+becomes
+```
+for (i=0; i<M; i+=2) 
+{
+  s1 = s2 = 0;
+  for (j) 
+  {
+    s1 = s1 + a[i][j] * x[j];
+    s2 = s2 + a[i+1][j] * x[j];
+  }
+  y[i] = s1; y[i+1] = s2;
+}
+```
