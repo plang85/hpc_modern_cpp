@@ -4,7 +4,7 @@ Introduction to HPC Scientific Computing, Eijkhout et al., 2014
 
 ## 1 - Single-processor Computing
 
-von Neumann
+### von Neumann
 - fetch, execute, store (in-order, control-flow); RAM (pure, no locality effects), stored program
 
 [Registers](https://godbolt.org/g/Hh2De5)
@@ -13,11 +13,11 @@ von Neumann
 - aim for register residency by explicit variables
 - register spill if requesting more than available
 
-Pipelines
+### Pipelines
 - different execution levels
 - multiple independent instructions in flight at different stage
 
-Instruction level parallelism (ILP)
+### Instruction level parallelism (ILP)
 - discovered
 - chances of validity decreases exponentially with instruction depth (branching, interdependence)
 - from control-flow to data-flow; superscalar
@@ -25,12 +25,12 @@ Instruction level parallelism (ILP)
 Memory (bandwith, latency) vs CPU (rating)
 bound
 
-[Cores](https://hw-lab.com/intel-sandy-bridge-cpu-microarchitecture.html/6)
+### [Cores](https://hw-lab.com/intel-sandy-bridge-cpu-microarchitecture.html/6)
 - out-of-order (additional transistors, energy) vs in-order (Intel Xeon Phi) execution handling
 - seperate units (addition, multiplication, fused multiply-add), duplicate functionality for ILP and out-of-order
 - mult/add in one cycle asymptotically (see pipelining), while division up to 20 cycles
 
-Pipelining
+### Pipelining
 - example: decode, find locations; copy to register; align exponents; add mantissa; normalize; store.
 - with pipelining, mutltiple indepedent operations in fligth at different stage, means asymptotically (with enough instructions n_1/2), we can execute one per cycle
 - longer pipelines (finer grained steps) can increase asymptotic speed but need more independent instructions in continuous stream. likelihood of independence and no branching decreases non-linear with number of instrucion pipeline
@@ -53,35 +53,35 @@ for (i = 0; i < N/2-1; i++)
 }
 ```
 
-32-bit, 64-bit
+### 32-bit, 64-bit
 - width of bus between processor and memory (64-bit can load one double per cycle)
 - memory address size
 - (integer) register size (floats bigger) = size of memory unit can operate on simultaneously
 
-ILP is facilitated by
+### ILP is facilitated by
 - independent
 - pipelined
 - branch-prediction
 - out-of-order execution
 - prefetching
 
-Memory hierarchies
+### Memory hierarchies
 - up to 100-1000 cycles to fetch from RAM
 - register, L1, L2 ... cache, RAM
 
-Busses
+### Busses
 - wires through which data move between components
 - Front-side bus (north bridge): CPU, AGP, RAM
 - South bridge: bios, IO, USB, PCI
 - around one GHz rating
 - bandwidth (bus width) 64-128 bit per cycle
 
-Latency vs bandwidth
+### Latency vs bandwidth
 - memory stall, ns/cycles
 - latency hiding: processing other/more instructions while waiting for memory, thread swithching (GPU strength)
 - time to data = latency + 1/bandwith times data size
 
-Caches
+### Caches
 - L1..LX SRAM
 - Bandwidth 32 bytes L1, same for L2 and L3, but there some goes towards coherence permanently
 - DRAM bandwidht 4.5 bytes shared between cores
@@ -105,19 +105,19 @@ and sockets (chips)
   - n-way associative: flexible, 1 memory location can map to n cache locations
 - Hardware prefetch algorithms to reduce stalling
 
-Concurrency
+### Concurrency
 - To exploit memory bandwith, enought relevant and independent requests must be made per cycle
 - Prefetching addresses this to some extent
 - Little's law: concurrency = bandwith x latency, effective throughput = expressed concurrency/latency
 
-Memory banks
+### Memory banks
 - Interleaved banks to allow for simultaneous fetch of adjacent/sequential data, ie 4 way
 
-TLB
+### TLB
 - Translation Look-aside buffer
 - fast, cached translation from program logical to physical memory pages, can miss
 
-Multicore architecture
+### Multicore architecture
 - increasing clock frequency heats up chip and doesn't address memory wall
 - ILP has logical limits
 - move from detected ILP to explicit task parallelism
@@ -132,7 +132,7 @@ Multicore architecture
 - Network
   - Multiple nodes
 
-Cache coherence
+### Cache coherence
 - Between core dedicated caches
 - Always applies to entire cache line
 - MSI: modified, shared (at least one cache and unmodified), invalid
@@ -142,7 +142,7 @@ Cache coherence
   - Data close in memory that are used by different cores
   - Since always entire cache line is tainted, coherence is an issue even though the same data is not touched
 
-Locality
+### Locality
 - Data used in related operations stored closely in memory
 - Arithmetic intensity
   - Operations per data (addidion: one op, two accesses)
@@ -155,7 +155,7 @@ Locality
 - Core locality
   - Pertians to task based parallelism, threads, processing unit, writing to same memory from different threads
 
-Programming Strategies
+### Programming Strategies
 - Goedeker and Hoisie
 - Loop tiling (cache blocking)
 ```
@@ -203,6 +203,7 @@ Power consumption
 ## 2 - Parallel Computing
 
 - Hard to define parallelism, many levels (ILP, threads, processes)
+- Parallel computer: multiple processors on same problem
 - Concurrency is the composition of independently executing processes
 - Parallelism is the simultaneous execution of (possibly related) computations
 - Goes on to explain map reduce example, communication cost, embarassingly parallelism and logarithmic scaling
@@ -212,7 +213,7 @@ Power consumption
 - On a strict von Neuman model superlinear speedup is impossible, but memory effects can lead to this, and always if disc swapping can be prevented
 - Critical path: dependencies between operations which limit parallelism, sequential limitations and communication
 
-Amdahl's law
+### Amdahl's law
 - Code parts that are inherently sequential limit speedup
 - Possible speedup is less than inverse of serial fraction of execution time
 - Efficiency decreases proportionally to number of processors
@@ -222,15 +223,43 @@ Amdahl's law
 - To account for this, it is more realistic to look at the sequential fraction independent of problem size
 - In hybrid parallelization, speedup is limited by the task parallel portion over the serial portion
 
-Scalability
+### Scalability
 - *Strong* scalability indicates processor count up to which speedup is maintained
 - *Weak* scalability describes problems where the the speed of operations per processor remains constant as the problem size grows such thath the amound of data per processor remains constant with increasing number of processors
 - Some algorithms scale badly because of increased communiction overhead and data duplicatoin
 
-Computer Architecture
+### Computer Architecture
 - Flynn's taxonomy: SISD (single CPU), SIMD (vectorization, threading eesh, GPU), MISD (defacto nonexistant), MIMD (parallel computers), where instruction refers to control flow
 - Vector instructions SIMD Streaming Extensions, Advanced Vector Extensions (512 bit, 8 floats)
 - Most supercomputers these days use commodity processors
 
-Memory Access
+### Memory Access
+- distributed vs shared, address space
+- Uniform Memory Access to abstract away physical boundaries of memory (aka Symmetric Multi Processing) - on one machine, connected through bus, uniform access time, shared L2 also an example
+- Non-Uniform Memory Access, through exchange network, maintains single address space, no uniform access time - may be extended to network (virtual shared memory)
+- Logically distributed memory, processors have own address space and no direct cross access, explicit communication - best scalability, hardest to program
 
+### Granularity of Parallelism
+- Data/fine-grained parallelism
+  - Simple loop parallelization, candidates for vectorization, splitting up data structure, single instruction etc...
+  - Efficient in lockstep parallelization accross multiple processors, think GPU
+- Instruction-level parallelism
+  - individual, similar, independent instructions in sequence
+  - compiler job
+- Task-level parallelism
+  - subprogram identification
+  - tree search
+  - think threading, OpenMP, SIMD for multi instruction plus logic operations (tasks)
+  - shared memory
+- Embarassing parallelism
+  - pure SIMD, single instruction, independent
+  - aka convenient parallelism
+- Medium grained parallelism
+  - single loop with range partitioned according to number of processors
+- Task granularity
+  - size of tasks before synchronization
+  - coarse: many instructions
+
+### Parallel programming
+- Thread parallelism
+  - Think OpenMP: hints at parallelization points, promise of independence
