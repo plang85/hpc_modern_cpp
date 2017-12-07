@@ -289,6 +289,8 @@ for (i=0; i<M; i+=2)
   - hyperthreading runs threads truly simultaneously
   - multithreading has hardware supported storage for information of multiple threads, allows for fast switching (gpu, xeon phi)
   
+### OpenMP
+- 
   
   
   
