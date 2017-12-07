@@ -284,6 +284,12 @@ for (i=0; i<M; i+=2)
   - Thread safety - same behaviour serial and parallel
   - Critical section: updates of shared state - e.g. use semaphore (lock indicator), thread sets, updates state, and unsets, others read and wait. or use lock on data structure itself. locks at os level slow
   - transactional memory - retry update if conflict detected - may incur pipeline flushing and cache invalidation
-  - affinity: 
+  - affinity: fixed mapping between threads/processes and cores, eg subsequent threats on same data should be on same core
+  - sequential consistency: same result parallel/serial
+  - hyperthreading runs threads truly simultaneously
+  - multithreading has hardware supported storage for information of multiple threads, allows for fast switching (gpu, xeon phi)
+  
+  
+  
   
   
