@@ -191,7 +191,7 @@ for (i=0; i<M; i+=2)
 - Loop unrolling limited by number of registers (16-32)
 - Lower order operations (eg copying) cost is amortizible
 
-Power consumption
+### Power consumption
 - Increases with component count
 - Decreases with component size about proportioinally (voltage, current)
 - Frequency increase leads to heat production
@@ -199,6 +199,13 @@ Power consumption
 - Multicore approach
 - Several megawatts for parallel computer
 
+### Unix process
+- execution of single program 
+- in memory
+  - program code in machine instructions
+  - heap - malloc
+  - stack - local items, stack/frame pointer and program counter, intermediate results
+- own data space
 
 ## 2 - Parallel Computing
 
@@ -263,3 +270,20 @@ Power consumption
 ### Parallel programming
 - Thread parallelism
   - Think OpenMP: hints at parallelization points, promise of independence
+  - A process can have multiple threads
+  - Shared memory parallelization: a thread has access to all process data (heap), but can have its own stack
+  - Threads are dynamic (can be created during program execution) - contrast MPI
+  - Master thread starts, others spawned, master waits for completion - fork-join
+  - One thread per core common model, multi-core processors
+  - Some cores support multiple threads, ie through scheduling while one waits for data
+  - Thread switchin expensive (except hyperthreading) on CPU, not on GPU
+  - Thread spawning incurrs overhead - trade-off
+  - Lock/Mutex (mutually exclusive) to avoid read-write collisions
+  - Shared and private state to threads makes context
+  - Context switch happens when more threads than cores and processor has to switch
+  - Thread safety - same behaviour serial and parallel
+  - Critical section: updates of shared state - e.g. use semaphore (lock indicator), thread sets, updates state, and unsets, others read and wait. or use lock on data structure itself. locks at os level slow
+  - transactional memory - retry update if conflict detected - may incur pipeline flushing and cache invalidation
+  - affinity: 
+  
+  
