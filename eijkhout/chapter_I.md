@@ -324,9 +324,15 @@ for (i=0; i<M; i+=2)
 - Pregel lends from it
 
 ### Program design
+- array-of-structures (messages) vs structures-of-array (SIMD)
+- latency hiding, overlapping computation with (asynchronous) communication
 
-
-
+### Topologies
+- scheme to connect processors in parallel machine
+- all-to-all and one-line ethernet don't scale
+- connecitvity is graph: degree, diameter and bandwith
+- busses: only one processor at a time can access memory, cache coherence and snooping
+- 
   
   
   
