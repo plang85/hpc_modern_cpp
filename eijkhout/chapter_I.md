@@ -290,7 +290,43 @@ for (i=0; i<M; i+=2)
   - multithreading has hardware supported storage for information of multiple threads, allows for fast switching (gpu, xeon phi)
   
 ### OpenMP
-- 
+- threads, dynamic parallelis
+- parallel regions
+- facilitates incremental parallelization
+- static scheduling can reuse data between subsequent but loose efficiency, dynamic the opposite
+- chunk size vs false sharing
+
+### MPI
+- distributed memory, coordination via explicit messages
+- blocking messages, cycle of waiting on depencies - deadlock
+- ops: process management, p2p comm, collective calls
+- buffer management (non-blocking comms) and blocking semantics central issues
+- collective: reduction, broadcast, gather, scatter, all-to-all
+- one-sided comm: eg remote-direct-memory-access (RDMA) suppor, declare shared area of memory available for one-sided transfer
+- non-blocking need explicit check for completion
+
+### Hybrid shared/distributed
+- MPI uses copy if on same node
+- non-obvious performance trade-offs
+
+### Parallel languages
+- Abstract level description of ops, distribution under hood
+- HPF, Chapel, Unified Parallel C, Linda
+- Partitioned Global Address Space
+- may lead to inefficient code through convenience (?)
+- most important aspect data treatment
+
+### Bulk synchronous parallelism
+- middle ground between message passing and complete abstractin
+- explicit communication, implicit ordering
+- all comms are one-sided and asynchronous
+- supersteps, ending in barrier which assures synchronization
+- Pregel lends from it
+
+### Program design
+
+
+
   
   
   
