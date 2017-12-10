@@ -329,11 +329,33 @@ for (i=0; i<M; i+=2)
 
 ### Topologies
 - scheme to connect processors in parallel machine
-- all-to-all and one-line ethernet don't scale
-- connecitvity is graph: degree, diameter and bandwith
+- all-to-all and one-line ethernet don't scale obviously
+- connecitvity is graph: degree, diameter and bandwith (bisection bandwith - simultaneous independent messages)
 - busses: only one processor at a time can access memory, cache coherence and snooping
-- 
+- linear arrays, rings
+- cartesian arrangement, torous connections, 2D and 3D
+- extended to hypercube: n-dim, 2**n nodes, each connected to n others
+- switched network: crossbar, butterfly, fat tree
+- affect latency and bandwith of cluster
+  - latency: handshake, coding/decoding, transmission
+  - bandwith: channel rate
+- locality: between cores (private and shared cache), between sockets, between nodes
   
-  
-  
-  
+### Multi-threaded architecture
+- More data parallelism than cores
+- Switching between tasks while waiting on memory (context switch)
+- Aimed at making context switch cheap
+- coprocessors need explicit seperate streams of work
+- coprocessors don't talk to the network directly
+- GPU
+  - combine SIMD and SPMD
+  - threads not completely independent, ordered in thread blocks, all threads in a block execute same instruction, i.e. SIMD
+  - instruction stream: *kernel* in CUDA, e.g. function
+  - SIMT
+  - GPU has several (dozens) of Streaming Multiprocessors (SMs), each with e.g. 8 streaming processors (cores)  
+  - data parallel
+  - threads within block share address space
+  - truly parallel: conditional that leads to one branch pauses all other threads not in this branch etc...
+  - data to GPU over bus, eg PCI-X, overhead
+  - single precision emphasis, not ideal with branching
+- Intel Xeon Phi, many integrated cores, SIMD style, bus connected, general purpose cores
