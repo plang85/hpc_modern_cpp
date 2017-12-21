@@ -45,7 +45,8 @@ else(OPENMP_FOUND)
 endif(OPENMP_FOUND)
 
 include_directories("${PROJECT_SOURCE_DIR}/minimization"
-                    "${PROJECT_SOURCE_DIR}/SIMD")
+                    "${PROJECT_SOURCE_DIR}/SIMD"
+                    "${PROJECT_SOURCE_DIR}/openmp")
 
 # Trivial example using gtest 
 add_executable(minimization 
@@ -59,8 +60,14 @@ add_executable(simd
                simd/SIMD.cpp
                simd/test_SIMD.cpp)
 
+add_executable(openmp 
+               main.cpp 
+               openmp/openmp.cpp)
+
 target_link_libraries(minimization gtest)
 target_link_libraries(simd gtest)
+target_link_libraries(openmp gtest)
 
 add_test(NAME minimization COMMAND minimization)
 add_test(NAME simd COMMAND simd)
+add_test(NAME openmp COMMAND openmp)
