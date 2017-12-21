@@ -80,7 +80,17 @@ int sum_sync()
 }
 
 
+int sharing()
+{
+    int i = 10;
+    #pragma omp parallel for firstprivate(i)
+    for (int j = 0; j < 10; ++j)
+    {
+        i = 1000 + omp_get_thread_num();
+    }
 
+    return i;
+}
 
 
 
@@ -90,4 +100,5 @@ TEST(OPENMP, one)
     omptwo();
     ompthree();
     ASSERT_EQ(sum_sync(), 100);
+    ASSERT_EQ(sharing(), 10);
 }
