@@ -1,6 +1,8 @@
 #include "SIMD.h"
 
 #include "cpuid.h"
+
+// SSE3
 #include <pmmintrin.h>
 #include <immintrin.h>
 
