@@ -3,7 +3,7 @@
 
 Platform | Build status
 ---------|-------------:
-Linux (gcc-6, clang-3.8)| [![Build Status](https://travis-ci.org/plang85/hpc_modern_cpp.svg?branch=master)](https://travis-ci.org/plang85/numerical_recipes_modern_cpp)
+Linux (gcc-6, clang-3.8)| [![Build Status](https://travis-ci.org/plang85/hpc_modern_cpp.svg?branch=master)](https://travis-ci.org/plang85/hpc_modern_cpp)
 
 :construction: this is under heavy construction right now :construction:
 ```
