@@ -34,13 +34,23 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-include_directories("${PROJECT_SOURCE_DIR}/minimization")
+include_directories("${PROJECT_SOURCE_DIR}/minimization"
+                    "${PROJECT_SOURCE_DIR}/SIMD")
 
 # Trivial example using gtest 
-add_executable(numrec 
-               main.cpp minimization/downhill_simplex.cpp 
-               main.cpp minimization/downhill_simplex_m.cpp 
+add_executable(minimization 
+               main.cpp 
+               minimization/downhill_simplex.cpp 
+               minimization/downhill_simplex_m.cpp 
                minimization/test_downhill_simplex.cpp)
 
-target_link_libraries(numrec gtest)
-add_test(NAME all COMMAND numrec)
+add_executable(simd 
+               main.cpp 
+               simd/SIMD.cpp
+               simd/test_SIMD.cpp)
+
+target_link_libraries(minimization gtest)
+target_link_libraries(simd gtest)
+
+add_test(NAME minimization COMMAND minimization)
+add_test(NAME simd COMMAND simd)
