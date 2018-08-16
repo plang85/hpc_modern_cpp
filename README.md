@@ -5,7 +5,7 @@ Platform | Build status
 ---------|-------------:
 Linux (gcc-6)| [![Build Status](https://travis-ci.org/plang85/hpc_modern_cpp.svg?branch=master)](https://travis-ci.org/plang85/hpc_modern_cpp)
 
-:construction: this is under heavy construction right now :construction:
+:construction: this really just a play field :construction:
 ```
 mkdir build
 cd build
